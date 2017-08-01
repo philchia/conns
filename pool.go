@@ -1,6 +1,18 @@
 package conns
 
-import "net"
+import (
+	"net"
+
+	"github.com/philchia/loop"
+)
+
+// this is a compiler checker that pool will implement Pool interface
+var _ Pool = (*pool)(nil)
+
+type pool struct {
+	dialer func() (net.Conn, error)
+	loop   loop.Loop
+}
 
 func (p *pool) Get() (net.Conn, error) {
 	if conn := p.loop.Pop(); conn != nil {
