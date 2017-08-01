@@ -7,15 +7,15 @@ import (
 )
 
 type pool struct {
-	creater func() (net.Conn, error)
-	loop.Loop
+	dialer func() (net.Conn, error)
+	loop   loop.Loop
 }
 
 // New create a connection pool
-func New(f func() (net.Conn, error), size uint) Pool {
+func New(dialer func() (net.Conn, error), size uint) Pool {
 	return &pool{
-		creater: f,
-		Loop:    loop.New(size),
+		dialer: dialer,
+		loop:   loop.New(size),
 	}
 }
 
