@@ -12,6 +12,7 @@ type pool struct {
 	conns  chan net.Conn
 }
 
+// Get fetch a conn from pool, create one if empty
 func (p *pool) Get() (net.Conn, error) {
 	select {
 	case conn := <-p.conns:
@@ -22,6 +23,7 @@ func (p *pool) Get() (net.Conn, error) {
 	return p.dialer()
 }
 
+// Put conn back to pool, close if full
 func (p *pool) Put(conn net.Conn) {
 	select {
 	case p.conns <- conn:
@@ -32,6 +34,7 @@ func (p *pool) Put(conn net.Conn) {
 	conn.Close()
 }
 
+// Drain the pool, close all conns
 func (p *pool) Drain() {
 	close(p.conns)
 	for conn := range p.conns {
