@@ -35,6 +35,6 @@ func (p *pool) Put(conn net.Conn) {
 func (p *pool) Drain() {
 	close(p.conns)
 	for conn := range p.conns {
-		conn.(net.Conn).Close()
+		conn.Close()
 	}
 }
