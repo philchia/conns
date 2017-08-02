@@ -2,15 +2,13 @@ package conns
 
 import (
 	"net"
-
-	"github.com/philchia/loop"
 )
 
 // New create a connection pool
 func New(dialer func() (net.Conn, error), size uint) Pool {
 	return &pool{
 		dialer: dialer,
-		loop:   loop.New(size),
+		conns:  make(chan net.Conn, size),
 	}
 }
 
